@@ -51,8 +51,17 @@ function get_random_graph(total_nodes) {
 }
 
 
-// TEST
-let graph = get_random_graph(total_nodes=10);
-console.log(graph);
+// TESTING
+let random_graph = get_random_graph(total_nodes=3);
+random_graph["edges"].forEach(e => e["value"] = 0);
+let actual_graph = {nodes: [{id: 0},
+						    {id: 1},
+						    {id: 2}],
+					edges: [{source: 0, target: 1, value: 0},
+							{source: 0, target: 2, value: 0},
+							{source: 1, target: 2, value: 0}]};
+console.log("random_graph: ", random_graph)
+console.log("actual_graph: ", actual_graph)
+console.log("Graphs same? ", JSON.stringify(random_graph) == JSON.stringify(actual_graph));
 
 </script>

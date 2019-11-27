@@ -17,7 +17,7 @@
 function get_random_graph(total_nodes) {
 	// Create node list
 	let nodes = function(num_nodes) {
-		nodes_array = [];
+		let nodes_array = [];
 		for(let i = 0; i < num_nodes; i++) {
 			nodes_array.push(
 				{id: i}
@@ -28,10 +28,10 @@ function get_random_graph(total_nodes) {
 
 	// Create edge list
 	let edges = function(nodes) {
-		edges_array = [];
+		let edges_array = [];
 		for(let i = 0; i < nodes.length; i++) {
 			for(let j = i + 1; j < nodes.length; j++) {
-				weight = Math.random() // Range [0, 1)
+				let weight = Math.random() // Range [0, 1)
 				edges_array.push(
 					{source: i,
 					 target: j,

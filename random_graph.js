@@ -1,67 +1,60 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-
-<script>
+import graph from "./graph.js";
 
 /* Purpose: Creates a complete random graph with
             random edge weights in range [0, 1).
             Made in object format, as seen in other graphs online.
-   Inputs: Number of nodes to create
-   Outputs: Complete random graph in form
-			{nodes: [{id: n1},
-					 {id: n2}, ...],
-			 edges: [{source: n1, target: n2, value: w1},
-			 		 {source: n1, target: n3, value: w2}, ...]}
-			where n is a node and w is a weight in range [0, 1)]
-*/
-function get_random_graph(total_nodes) {
-	// Create node list
-	let nodes = function(num_nodes) {
-		let nodes_array = [];
-		for(let i = 0; i < num_nodes; i++) {
-			nodes_array.push(
-				{id: i}
-			);
-		}
-		return nodes_array;
-	}(total_nodes);
+   Inputs: Number of nodes to create.
+   Outputs: Complete random graph.*/
+function get_complete_random_graph(num_nodes) {
+	let complete_graph = new graph();
 
-	// Create edge list
-	let edges = function(nodes) {
-		let edges_array = [];
-		for(let i = 0; i < nodes.length; i++) {
-			for(let j = i + 1; j < nodes.length; j++) {
-				let weight = Math.random() // Range [0, 1)
-				edges_array.push(
-					{source: i,
-					 target: j,
-					 value: weight}
-				);
-			}
-		}
-		return edges_array;
-	}(nodes);
+	// Add nodes
+	for(let i = 0; i < num_nodes; i++) {
+		// complete_graph[i] = {};
+		complete_graph.add_node(i);
+	}
 
-	// Compile into graph
-	let graph = {
-		nodes: nodes,
-		edges: edges
-	};
-	return graph;
+	// Add complete edges
+	for(let i = 0; i < num_nodes; i++) {
+		for(let j = i + 1; j < num_nodes; j++) {
+			let weight = Math.random();
+			complete_graph.add_edge_undirected(i, j, weight);
+		}
+	}
+
+	return complete_graph;
 }
 
 
 // TESTING
-let random_graph = get_random_graph(total_nodes=3);
-random_graph["edges"].forEach(e => e["value"] = 0);
-let actual_graph = {nodes: [{id: 0},
-						    {id: 1},
-						    {id: 2}],
-					edges: [{source: 0, target: 1, value: 0},
-							{source: 0, target: 2, value: 0},
-							{source: 1, target: 2, value: 0}]};
-console.log("random_graph: ", random_graph)
-console.log("actual_graph: ", actual_graph)
-console.log("Graphs same? ", JSON.stringify(random_graph) == JSON.stringify(actual_graph));
+function test_get_random_graph() {
+	// Expected
+	let expected = new graph();
+	expected.graph = {0: {1: 0,
+						  2: 0},
+					  1: {0: 0,
+					  	  2: 0},
+					  2: {0: 0,
+					  	  1: 0}};
 
-</script>
+	// Produced
+	let produced = get_complete_random_graph(3);
+	produced.forEach_node(node_id => {
+		produced.forEach_nbr_of_node(node_id, nbr_id => {
+			produced.graph[node_id][nbr_id] = 0;
+		});
+	});
+
+	// Output
+	let name = "test_get_random_graph";
+	let e_json = expected.get_json();
+	let p_json = produced.get_json();
+	let passed = e_json == p_json;
+	console.log(name);
+	console.log("Expected: ", e_json);
+	console.log("Produced: ", p_json);
+	passed ? console.log("SUCCESS") : console.error("FAILURE");
+	console.log("\n");
+}
+
+test_get_random_graph();
